@@ -2,10 +2,18 @@
 // ©jdehorty
 
 // @version=5
-indicator('Machine Learning: Lorentzian Classification', 'Lorentzian Classification', true, precision=4, max_labels_count=500) 
+strategy(title="Lorentzian Classification", overlay=true, scale=scale.none, default_qty_type=strategy.percent_of_equity, default_qty_value=100, currency=currency.USD, calc_on_every_tick=true)
+if startLongTrade
+    strategy.entry("Long", strategy.long)
+if startShortTrade
+    strategy.entry("Short", strategy.short)
+
+
 
 import jdehorty/MLExtensions/2 as ml
 import jdehorty/KernelFunctions/2 as kernels
+
+
 
 // ====================
 // ==== Background ====
