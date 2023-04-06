@@ -7,7 +7,26 @@ if startLongTrade
     strategy.entry("Long", strategy.long)
 if startShortTrade
     strategy.entry("Short", strategy.short)
-
+startLongTrade = isNewBuySignal and isBullish and isEmaUptrend and isSmaUptrend
+startShortTrade = isNewSellSignal and isBearish and isEmaDowntrend and isSmaDowntrend
+isDifferentSignalType = ta.change(signal)
+isEarlySignalFlip = ta.change(signal) and (ta.change(signal[1]) or ta.change(signal[2]) or ta.change(signal[3]))
+isBuySignal = signal == direction.long and isEmaUptrend and isSmaUptrend
+isSellSignal = signal == direction.short and isEmaDowntrend and isSmaDowntrend
+isLastSignalBuy = signal[4] == direction.long and isEmaUptrend[4] and isSmaUptrend[4]
+isLastSignalSell = signal[4] == direction.short and isEmaDowntrend[4] and isSmaDowntrend[4]
+isNewBuySignal = isBuySignal and isDifferentSignalType
+isNewSellSignal = isSellSignal and isDifferentSignalType
+lastSignalWasBullish = ta.barssince(startLongTrade) < ta.barssince(startShortTrade)
+lastSignalWasBearish = ta.barssince(startShortTrade) < ta.barssince(startLongTrade)
+barsSinceRedEntry = ta.barssince(startShortTrade)
+barsSinceRedExit = ta.barssince(alertBullish)
+barsSinceGreenEntry = ta.barssince(startLongTrade)
+barsSinceGreenExit = ta.barssince(alertBearish)
+isValidShortExit = barsSinceRedExit > barsSinceRedEntry
+isValidLongExit = barsSinceGreenExit > barsSinceGreenEntry
+endLongTradeDynamic = (isBearishChange and isValidLongExit[1])
+endShortTradeDynamic = (isBullishChange and isValidShortExit[1])
 
 
 import jdehorty/MLExtensions/2 as ml
